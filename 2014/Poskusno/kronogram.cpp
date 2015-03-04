@@ -1,5 +1,5 @@
 /*
- * Putka Naloge - Bilanca
+ * Putka Naloge - Kronogram
  *
  *
  *       ___           ___           ___                 
@@ -28,42 +28,41 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-#include <array>
+#include <map>
 
 using namespace std;
 
 int main()
 {
-    int stevecMesecev = 0;
     string vrstica;
-    array<vector<int>, 12> vektor;
-    int letnaBilanca = 0;
+
+    //Nastavimo si mapiranje crk
+    map<char,int> crke;
+    map<char,int>::iterator iteratorCrke;
+    crke['I'] = 1;
+    crke['V'] = 5;
+    crke['X'] = 10;
+    crke['L'] = 50;
+    crke['C'] = 100;
+    crke['D'] = 500;
+    crke['M'] = 1000;
+
+    //Zavrzemo prvo vrstico
+    getline(cin, vrstica);
 
     while(getline(cin, vrstica))
     {   
+        int vsota = 0;
         if (!vrstica.empty()) {
-            vektor[stevecMesecev].insert(vektor[stevecMesecev].end(), stoi(vrstica));
-        } else { //Za trenutni mesec preverimo zadeve, nato povecamo mesec
-            int vhodnaVsota = vektor[stevecMesecev].back();
-            vektor[stevecMesecev].pop_back();
-            int dejanskaVsota = 0;
-            while (!vektor[stevecMesecev].empty())
-            {
-                dejanskaVsota += vektor[stevecMesecev].back();
-                vektor[stevecMesecev].pop_back();
+            for (int i = 0; i < vrstica.size(); ++i) {
+                iteratorCrke = crke.find(vrstica[i]);
+                if (iteratorCrke != crke.end()) {
+                    vsota += iteratorCrke->second;
+                }
             }
-            if (dejanskaVsota == vhodnaVsota) {
-                cout << "OK" << endl;
-            } else {
-                cout << dejanskaVsota << endl;
-            }
-            letnaBilanca += dejanskaVsota;
-            stevecMesecev++;
+            cout << vsota << endl;
         }
     }
-    
-    cout << letnaBilanca;
 
     return 0;
 }
